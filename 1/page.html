@@ -1,0 +1,84 @@
+<style>
+  body {
+    width: 960px;
+    margin: auto;
+  }
+  ul {
+    padding: 0;
+    list-style-type: none;
+  }
+  h1 {
+    text-align: center;
+  }
+  .weather_news {
+    padding: 10px 20px;
+    line-height: 1.6;
+    background-color: #fdf;
+    border-radius: 10px;
+  }
+  .weather_forecasts {
+    font-size: 20px;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .weather_forecasts ul {
+    list-style-type: none;
+    text-align: center;
+  }
+  .weather_forecasts li {
+    display: inline-block;
+    /display: inline;
+    /zoom: 1;
+    margin: 10px;
+    padding: 10px;
+    border: 3px solid #0033FF;
+    border-radius: 10px;
+  }
+</style>
+
+<?
+
+    // 「コード.gs」のweatherData()を実行しJSONを取得
+    var data = weatherData();
+
+    // JSONデータ内にある「title」要素を取得
+    var title = data["title"];
+
+?>
+
+<!-- 取得した「title」要素をh1タグで表示 -->
+<h1><?= title ?></h1>
+
+<!-- 天気概要を表示 -->
+<div class="weather_news">
+<?
+
+  output.append('<p>' + data["description"]["text"] + '</p>');
+
+?>
+</div>
+
+<!-- 天気フォーキャストを表示 -->
+<div class="weather_forecasts">
+  <ul>
+  <?
+  var count = data["forecasts"].length;
+  
+  // 天気情報のフォーキャストをli要素で生成
+  for(var i=0; i<count; i++) {
+  
+    output.append('<li>' +
+      data["forecasts"][i]["dateLabel"] + ' ' +
+      data["forecasts"][i]["date"] + '<br />' +
+      data["forecasts"][i]["telop"] + '<br />' +
+      '<img src="' + data["forecasts"][i]["image"].url + '">' +
+    '</li>');
+  
+  }
+  ?>
+  </ul>
+</div>
+
+<hr />
+
+<p><small>更新時間：<?= data["publicTime"] ?></small></p>
